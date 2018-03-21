@@ -1,0 +1,35 @@
+@mixin tam-specified($tam) {
+  @include share(width, height, line-height, $tam);
+}
+
+@mixin aspect-ratio($width, $height) {
+  position: relative;
+
+  &:before {
+    content: "";
+    display: block;
+    width: 100%;
+    padding-top: ($height / $width) * 100%;
+  }
+
+  > .ratio-fixed-content {
+    @include absolute(top right bottom left);
+  }
+}
+
+@mixin responsive-ratio($x,$y, $pseudo: false) {
+  $padding: unquote( ( $y / $x ) * 100 + '%' );
+  @if $pseudo {
+    &:before {
+      @include pseudo($position: relative);
+      width: 100%;
+      padding-top: $padding;
+    }
+  } @else {
+    padding-top: $padding;
+  }
+}
+
+@mixin height($height) {
+  @include share(height, line-height, $height);
+}

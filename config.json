@@ -1,0 +1,53 @@
+{
+	"vendorJS": {
+		"src": "src/assets/js/vendor/*.js",
+		"src": "src/assets/js/vendor/*.js",
+		"dest": "public/assets/js/vendor"
+	},
+	"templates": {
+		"src": [
+			"src/templates/**/*.pug",
+			"!src/templates/partials/*.pug",
+			"!src/templates/layouts/*.pug"
+		],
+		"dest": "public"
+	},
+	"styles": {
+		"src": "src/scss/*.s*ss",
+		"dest": "public/assets/css"
+	},
+	"plugins": {
+		"src": [
+			"src/js/plugins/_plugins.js",
+			"src/js/plugins/breakpoints.js"
+		],
+		"dest": "public/assets/js/"
+	},
+	"scripts": {
+		"src": [],
+		"dest": "public/assets/js/"
+	},
+	"watch": {
+		"vendorJS": [
+			"src/assets/js/vendor/*.js"
+		],
+		"scripts": [
+			"src/js/**/*.js"
+		],
+		"styles": [
+			"src/scss/**/*.{scss,sass,css}"
+		],
+		"templates": [
+			"src/templates/**/*.pug",
+			"!src/templates/partials/*.pug"
+		],
+		"templatePartials": [
+			"src/templates/partials/*.pug",
+			"src/templates/layouts/*.pug"
+		],
+		"html": [
+			"public/**/*.html",
+			"!public/assets"
+		]
+	}
+}

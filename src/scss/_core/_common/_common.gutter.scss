@@ -1,0 +1,11 @@
+$coke-gutter: $coke-font-size * $coke-line-height !default;
+
+$coke-gutter-1-2: $coke-gutter / 2 !default;
+$coke-gutter-1-3: $coke-gutter / 3 !default;
+$coke-gutter-1-4: $coke-gutter / 4 !default;
+
+$coke-gutter-2-3: ($coke-gutter / 3) * 2 !default;
+
+$coke-gutter-2: $coke-gutter * 2 !default;
+$coke-gutter-3: $coke-gutter * 3 !default;
+$coke-gutter-4: $coke-gutter * 4 !default;

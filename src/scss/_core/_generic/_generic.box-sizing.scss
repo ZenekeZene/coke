@@ -1,0 +1,25 @@
+$coke-generate-box-sizing: true !default;
+
+@if ($coke-generate-box-sizing) {
+	/*
+	* ------------------------------------------------
+	* [Generic] - Box-Sizing
+	* ------------------------------------------------
+	*/
+
+	// More sensible default box-sizing:
+	// @link css-tricks.com/inheriting-box-sizing-probably-slightly-better-best-practice
+
+	html {
+	  box-sizing: border-box;
+	}
+
+	* {
+
+	  &,
+	  &:before,
+	  &:after {
+	    box-sizing: inherit;
+	  }
+	}
+}

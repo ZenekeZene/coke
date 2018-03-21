@@ -1,0 +1,210 @@
+@charset "UTF-8";
+
+//     ______   _        ______  __   __  ____     ____   __   __
+//    |  ____| | |      |  ____| \ \ / / |  _ \   / __ \  \ \ / /
+//    | |__    | |      | |__     \ V /  | |_) | | |  | |  \ V /
+//    |  __|   | |      |  __|     > <   |  _ <  | |  | |   > <
+//    | |      | |____  | |____   / . \  | |_) | | |__| |  / . \
+//    |_|      |______| |______| /_/ \_\ |____/   \____/  /_/ \_\
+//
+//      Utility to reuse common flexbox patterns at the container level.
+//      That is, it only serves to generate classes, attributes and make use of
+//      the mixin within our SCSS or HTML for triads of flex values
+//      (display, justify-content, align-items).
+//
+//      1.-EXAMPLE USE OF MIXIN:
+//
+//        [ file.scss ]:
+//          .selector {
+//            @include flex(inline-flex, start, around);
+//          }
+//
+//          .selector2 {
+//            @include flex(flex, baseline);
+//          }
+//
+//        [ styles.css - output ]:
+//          .selector {
+//            display: inline-flex;
+//            justify-content: flex-start;
+//            align-items: space-around;
+//          }
+//
+//          .selector2 {
+//            display: flex;
+//            justify-content: baseline;
+//          }
+//
+//      2.-EXAMPLE USE OF CLASSNAME AND ATTRIBUTE:
+//
+//        [ file.html ]:
+//          <p class="f-flex-start-center">Lorem ipsum</p>
+//          <p f-inline-flex-between-end>Lorem ipsum</p>
+//
+//      3.-EXAMPLE USE OF EXTEND:
+//
+//        [ _partial.scss ]:
+//          .selector {
+//            @extend .l-flex-center-baseline;
+//          }
+//
+//
+//                        v1.0.0
+//         Authors: Héctor Villar Mozo (www.hectorvillar.com)
+//      This project is licensed under the terms of the MIT license
+
+////
+/// flexbox library public configuration
+/// @author Héctor Villar Mozo
+/// @access public
+////
+
+///
+/// If we want to generate useful classes and attributes for X.
+$coke-generate-flex-selectors: false !default;
+
+///
+/// Creates a list of flexbox display.
+///
+/// @example scss - Creates a single kind of flexbox display 'flex'
+///  $display-flex: ('inline-flex': inline-flex)
+///
+$coke-display-flex: (
+  'flex': flex
+) !default;
+
+///
+/// Create an alignment map for flexbox displays, they are used for both the
+/// horizontal axis and the vertical axis.
+///
+/// @example scss - Creates a map with the current alignments in flexbox
+///  $coke-space-align: ('start': flex-start, 'end': flex-end, 'center': center);
+///
+/// BUT BE AWARE: This can generate a huge chunk of extra CSS, depending on the
+/// amount of breakpoints you defined. So please check your CSS’ output and
+/// filesize!
+///
+$coke-space-align: (
+  'start': flex-start,
+  'end': flex-end,
+  'center': center,
+) !default;
+
+///
+/// Creates a basic configuration to generate selectors later.
+///
+/// @example scss - Create a basic configuration to generate selectors in Snake
+/// Case mode, with prefix 'layout'
+///  $coke_config-flex: ('pref': 'layout', 'case': '_')
+///
+$coke_config-flex: (
+  'pref': 'l',
+  'case': '-'
+) !default;
+
+///
+/// It triggers an error message when we insert parameters that are not inside
+/// $coke-display-flex and $coke-space-align maps.
+///
+/// @parameter {Map} $collection - Map where the error was found.
+/// @parameter {String} $subject - String key that has given the error within the map.
+/// @return {String} - Error message string returned.
+///
+@function error-message($collection, $subject) {
+  @return 'Error with `#{$subject}` parameter.' +
+          'Must be `#{map-values($collection)}`, not `#{$subject}`.';
+}
+
+///
+/// Function that checks if the key exists, and if it exists within the given map.
+///
+/// @parameter {String} $key - Key to be checked.
+/// @parameter {Map} $collection [$coke-space-align] - Map in which it will be
+/// verified if the key exists.
+///
+/// @return {Boolean} - If so, it returns true, but returns false and launches a
+/// log by console.
+///
+@function has-correct-flex-value($key, $collection: $coke-space-align) {
+  @if ($key != null) {
+    @if (map-has-key($collection, $key)) {
+      @return true;
+    } @else {
+      @error error-message($collection, $key);
+    }
+  }
+  @return false;
+}
+
+///
+/// Mixin that adjusts the values ​​to their corresponding CSS properties as long
+/// as they exist within the configuration maps and have been passed as arguments.
+///
+/// @parameter {String} [null] $display - String key to identify the value for display property.
+/// @parameter {String} [null] $display - String key to identify the value for justify-content property.
+/// @parameter {String} [null] $display - String key to identify the value for align-items property.
+///
+///  @example scss - We center vertically and horizontally using flexbox:
+///    @include flex(flex, center, center);
+///
+///  @example scss - We align our children flex towards the beginning of the
+///  horizontal axe and at the end of the vertical axe:
+///    @include flex(flex, start, end);
+///
+@mixin flex( $display: null, $justify-content: null, $align-items: null) {
+  @if (has-correct-flex-value($display, $coke-display-flex)) {
+    display: map_get($coke-display-flex, $display);
+  }
+
+  @if (has-correct-flex-value($justify-content, $coke-space-align)) {
+    justify-content: map_get($coke-space-align, $justify-content);
+  }
+
+  @if (has-correct-flex-value($align-items)) {
+    align-items: map_get($coke-space-align, $align-items);
+  }
+}
+
+///
+/// [*] Sequence that generates a classname (Specificity: 0010) and
+/// an attribute (Specificity: 0001) for each possible combination with the
+/// $display-flex and $coke-space-align maps. ONLY if $coke-generate-flex-selectors is true.
+///
+/// NOTE: If we have declared many items in our $ space-align, our CSS can be
+/// oversized. Only define the flexbox triad patterns that we use the most.
+///
+@if ($coke-generate-flex-selectors) {
+	/*
+	* ------------------------------------------------
+	* [Utils] - Flexbox utils selectors
+	* ------------------------------------------------
+	*/
+
+	@each $d-flex, $v1 in $coke-display-flex {
+	  $case: map_get($coke_config-flex, 'case');
+	  $sel-display: map_get($coke_config-flex, 'pref') + $case + $d-flex + '';
+
+	  .#{$sel-display},
+	  [#{$sel-display}] {
+	    @include flex($d-flex);
+	  }
+
+	  @each $k-justify, $v2 in $coke-space-align {
+	    $sel-display-justify: $sel-display + $case + $k-justify + '';
+
+	    .#{$sel-display-justify},
+	    [#{$sel-display-justify}] {
+	      @include flex($d-flex, $k-justify);
+	    }
+
+	    @each $k-align, $v3 in $coke-space-align {
+	      $sel-display-justify-align: $sel-display-justify + $case + $k-align + '';
+
+	      .#{$sel-display-justify-align},
+	      [#{$sel-display-justify-align}] {
+	        @include flex($d-flex, $k-justify, $k-align);
+	      }
+	    }
+	  }
+	}
+}

@@ -1,0 +1,131 @@
+// Debug styling in screens:
+@mixin styles-debug-output {
+  position: fixed;
+  z-index: 9999;
+  display: block;
+	@include share(margin, padding, 15px);
+  white-space: pre;
+
+  background-color: rgba(#EFEFEF, 0.9)            !important;
+  border: 1px solid #DDD                    !important;
+  border-radius: .2em                       !important;
+
+  color: #333                               !important;
+  font: .75em/1.5 "Andale Mono", monospace  !important;
+  text-shadow: 0 1px white                  !important;
+  white-space: pre-wrap                     !important;
+  box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.4) !important;
+  background: {
+    image: url('../assets/img/debug.png');
+    repeat: no-repeat;
+    size: 60px;
+    position: center top;
+  }
+}
+
+// ------------------
+// A.- LOG, used for simple texts:
+// ------------------
+@function console-log($debug: '') {
+  @return "» #{inspect($debug)}\A";
+}
+
+@mixin console-log($debug: '', $selector: body, $pseudo: before) {
+  #{$selector}:#{$pseudo} {
+    content: console-log($debug);
+  }
+}
+
+// B.- LOG for lists, maps and other collections:
+@function debug($input, $pre: false, $typed: false, $level: 1) {
+  $tab: "    ";
+  $indent: "";
+  $break: if($pre, "\A ", "");
+
+  @if length($input) == 0 {
+    @return "( )";
+  }
+
+  @if length($input) == 1 {
+    @return if($pre,  "(" + type-of($input) + ") ", "") + $input;
+  }
+
+  @for $i from 1 to $level {
+    $indent: $indent + $tab;
+  }
+
+  $result: if(type-of($input) == map, "Note: IS MAP!\A", "");
+
+  $result: $result + "[" + $break;
+
+  @for $i from 1 through length($input) {
+    $item: nth($input, $i);
+    $result: $result + if($pre, $indent + $tab, " ");
+
+    @if length($item) > 1 {
+      $result: $result
+          + if($typed, "(list: " + length($item) + ") ", "")
+          + debug($item, $pre, $typed, $level + 1);
+    }
+
+    @else {
+      @if $typed {
+        $result: $result + "(" + type-of($item) + ") ";
+      }
+
+      @if length($item) == 0 {
+        $result: $result + "( )";
+      }
+
+      @else if type-of($item) == string {
+        $result: $result + quote($item);
+      }
+
+      @else if $item == null {
+        $result: $result + "null";
+      }
+
+      @else {
+        $result: $result + $item;
+      }
+    }
+
+    @if $i != length($input) {
+      $result: $result + "," + $break;
+    }
+  }
+
+  $result: $result + $break + if($pre, if($level > 1, $indent, ""), " ") + "]";
+
+  @return quote($result);
+}
+
+@mixin debug($list, $selector: body, $pseudo: before, $pre: false, $typed: false) {
+  @at-root #{$selector}:#{$pseudo} {
+    @if (type-of($list) == map or type-of($list) == list) {
+      content: debug($list, $pre, $typed) !important;
+      top: 0 !important;
+    }
+    @else {
+      content: console-log($list) !important;
+      bottom: 0 !important;
+    }
+    @include styles-debug-output;
+  }
+}
+
+// Example collections:
+// $list: (a #BADA55 42, (false (yummy cupcake)), 14px, "gloubiboulga", (), null);
+// $list2: (
+//   start: flex-start,
+//   end: flex-end,
+//   center: center,
+//   stretch: stretch,
+//   between: space-between,
+//   around: space-around,
+//   baseline: baseline
+// );
+
+// Use:
+// @include debug($list, $pre: true);
+// @include debug($list2, p);

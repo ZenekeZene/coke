@@ -1,0 +1,69 @@
+// @link https://hugogiraudel.com/2014/05/19/new-offsets-sass-mixin/
+
+@mixin position($position, $args: (), $quien: null) {
+	$offsets: top right bottom left;
+  position: $position;
+
+	@each $offset in $offsets {
+		$index: index($args, $offset);
+
+    @if $index {
+      @if $index == length($args) {
+        #{$offset}: 0;
+      }
+      @else {
+        $next: nth($args, $index + 1);
+        @if index($offsets, $next) {
+          #{$offset}: 0;
+        }
+        @else if is-valid-length($next) {
+          #{$offset}: $next;
+        }
+        @else {
+          @warn "Invalid value `#{$next}` for offset `#{$offset}`.";
+        }
+      }
+    }
+  }
+}
+
+// Function checking if $value is a valid length
+// ---
+// @param [literal] $value: value to test
+// ---
+// @return [bool]
+@function is-valid-length($value) {
+  @return (type-of($value) == number and not unitless($value)) or (index(auto initial inherit 0, $value) != false);
+}
+
+// Shorthands:
+@mixin absolute($args: ()) {
+  @include position(absolute, $args);
+}
+
+@mixin fixed($args: ()) {
+  @include position(fixed, $args);
+}
+
+@mixin relative($args: ()) {
+  @include position(relative, $args);
+}
+
+// Shortcuts:
+
+@mixin absolute-top-left($top: 0, $left: 0) {
+  position: absolute;
+  top: $top;
+  left: $left;
+}
+
+@mixin center-vertically-position($tam) {
+  top: 50%;
+  margin-top: -$tam / 2;
+}
+
+@mixin center-fully-absolute() {
+  @include absolute-top-left(50%, 50%);
+  transform: translate(-50%, -50%);
+  @include share(width, height, auto);
+}

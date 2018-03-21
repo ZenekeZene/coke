@@ -1,0 +1,105 @@
+@mixin square($size: 2rem, $bg-color: transparent) {
+	display: inline-block;
+	width: $size;
+	height: $size;
+	background-color: $bg-color;
+}
+
+@mixin circle($size: 2rem, $bg-color: transparent) {
+	@include square($size);
+	border-radius: 50%;
+	background-color: $bg-color;
+}
+
+@mixin heart($size: 2rem, $bg-color: transparent) {
+	position: relative;
+	display: inline-block;
+	width: $size;
+	height: $size - ($size * 0.1);
+
+	&:before,
+	&:after {
+		content: '';
+		position: absolute;
+		top: 0;
+		left: $size / 2;
+		width: $size / 2;
+		height: $size - ($size * 0.2);
+		background-color: $bg-color;
+		border-radius: ($size / 2) ($size / 2) 0 0;
+		transform: rotate(-45deg);
+		transform-origin: 0 100%;
+	}
+
+	&:after {
+		left: 0;
+		transform: rotate(45deg);
+		transform-origin: 100% 100%;
+	}
+}
+
+@mixin triangle($direction, $color: currentColor, $size: 1rem) {
+  @if not index(top right bottom left, $direction) {
+    @error "Direction must be either `top`, `right`, `bottom` or `left`.";
+  }
+	content: "";
+	position: absolute;
+  width: 0;
+  height: 0;
+  border-#{opposite-direction($direction)}: $size solid $color;
+
+  $perpendicular-borders: $size solid transparent;
+
+  @if $direction == top or $direction == bottom {
+    border-left:   $perpendicular-borders;
+    border-right:  $perpendicular-borders;
+
+  } @else if $direction == right or $direction == left {
+    border-bottom: $perpendicular-borders;
+    border-top:    $perpendicular-borders;
+  }
+}
+
+@mixin triangle-corner($direction-vertical, $direction-horizontal, $color: currentColor, $size: 1rem) {
+	@if not index(top right bottom left, $direction-horizontal) {
+    @error "Direction must be either `top`, `right`, `bottom` or `left`.";
+  }
+
+	@if not index(top right bottom left, $direction-vertical) {
+    @error "Direction must be either `top`, `right`, `bottom` or `left`.";
+  }
+
+	content: "";
+	position: absolute;
+	width: 0;
+  height: 0;
+	@if $direction-vertical == top and $direction-horizontal == left {
+		border-top: $size solid $color;
+		border-right: $size solid transparent;
+		top: 0;
+		left: 0;
+	}
+
+	@if $direction-vertical == top and $direction-horizontal == right {
+		border-top: $size solid $color;
+		border-left: $size solid transparent;
+		top: 0;
+		right: 0;
+	}
+
+	@if $direction-vertical == bottom and $direction-horizontal == left {
+		border-bottom: $size solid $color;
+		border-right: $size solid transparent;
+		bottom: 0;
+		left: 0;
+	}
+
+	@if $direction-vertical == bottom and $direction-horizontal == right {
+		border-bottom: $size solid $color;
+		border-left: $size solid transparent;
+		bottom: 0;
+		right: 0;
+	}
+
+
+}

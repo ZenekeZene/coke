@@ -1,0 +1,19 @@
+@function em( $pixels, $context: $coke-font-size ) {
+  @return ( $pixels / $context * 1em );
+}
+
+@function px( $pixels ) {
+  @return ( $pixels * 1px );
+}
+
+@function rem( $pixels, $context: $coke-font-size ) {
+  @return ( $pixels / $context * 1rem );
+}
+
+@function img( $image, $path: '../assets/' ) {
+  @return url( $path + $image );
+}
+
+@function lh( $fline, $fsize: $coke-font-size ) {
+  @return ( $fline * 100% / $fsize );
+}

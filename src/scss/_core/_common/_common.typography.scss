@@ -1,0 +1,65 @@
+$coke-font-size: 16px !default;
+$coke-line-height: 1.5 !default;
+
+$coke-generate-font-selectors: false !default;
+
+// Font weights:
+$coke-font-thin: 100 !default;
+$coke-font-extra-light: 200 !default;
+$coke-font-light: 300 !default;
+$coke-font-regular: 400 !default;
+$coke-font-medium: 500 !default;
+$coke-font-semi-bold: 600 !default;
+$coke-font-bold: 700 !default;
+$coke-font-extra-bold: 800 !default;
+$coke-font-black: 900 !default;
+
+$coke-font-weights:(
+  'thin': $coke-font-thin,
+  'extra-light': $coke-font-extra-light,
+  'light': $coke-font-light,
+  'regular': $coke-font-regular,
+  'medium': $coke-font-medium,
+  'semi-bold': $coke-font-semi-bold,
+  'bold': $coke-font-bold,
+  'extra-bold': $coke-font-extra-bold,
+  'black': $coke-font-black
+) !default;
+
+@if ($coke-generate-font-selectors) {
+	// Font weights declare 2 types, classname and also in mode attribute, as CSS Utilities:
+	@each $font-name, $font-value in $coke-font-weights {
+	  .font-#{$font-name},
+	  [font-#{$font-name}] {
+	    font-weight: $font-value;
+	  }
+	}
+
+	.text-underline {
+	  text-decoration: underline;
+	}
+
+	.pre-wrap,
+	[pre-wrap] {
+	  white-space: pre-wrap
+	}
+}
+
+// Mixins:
+@mixin font-size-height($size) {
+  font-size: $size;
+  line-height: $size;
+}
+
+@mixin font-face($family, $src, $weight: normal, $style: normal ) {
+	@font-face {
+		font-family: $family;
+		src: url($src + '.eot');
+		src: url($src + '.eot?#iefix') format('embedded-opentype'),
+			url($src + '.woff') format('woff'),
+			url($src + '.ttf') format('truetype');
+			//url('$src.svg##{$family}') format('svg');
+		font-style: $style;
+		font-weight: $weight;
+	}
+}

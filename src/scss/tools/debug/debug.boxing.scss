@@ -1,0 +1,26 @@
+$coke-debug-boxing: false !default;
+
+$coke-colors-debugger: (
+  #3ea5ce,
+  #99c712,
+  #e53b3a,
+  #000000,
+  #cacacA
+) !default;
+
+@function getColorRandom() {
+  $key-color-random: random(length($coke-colors-debugger));
+  $color-random: nth($coke-colors-debugger, $key-color-random);
+  @return $color-random;
+}
+
+@mixin outline($color-input: null) {
+  @if ($coke-debug-boxing) {
+    @if ($color-input) {
+      outline: 1px dashed $color-input;
+    } @else {
+      $color-output: getColorRandom();
+      outline: 1px dashed $color-output;
+    }
+  }
+}
