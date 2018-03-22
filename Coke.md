@@ -15,7 +15,6 @@
 <p><strong>Separarnos del fork de Asteroids:</strong></p>
 <ul>
 <li>Dejar 2 entornos: Con <strong>Gulp</strong> y con <strong>Webpack</strong>.</li>
-<li>Limpiar rastro en Github (aparecen los colaboradores).</li>
 <li>Simplicar el uso de Pug y de JS.</li>
 </ul>
 </li>
