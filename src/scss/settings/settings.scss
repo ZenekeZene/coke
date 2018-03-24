@@ -11,7 +11,10 @@ $coke-breakpoints: (
   'desktop': 1024px
 ) !default;
 
-// SETTING FLAGS:
+// Example of transfer by reference, so as not to drag the prefix '$coke'
+$gutter: $coke-gutter !default;
+
+// Settings flags:
 $coke-generate-box-sizing: true !default;
 $coke-generate-normalize: true !default;
 $coke-generate-reset: true !default;

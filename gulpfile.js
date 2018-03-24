@@ -25,24 +25,24 @@ var onError = function(err) {
 };
 
 // > Process .PUG files into 'public' folder
-gulp.task( 'templates' , function(cb) {
-	return gulp.src(config.templates.src)
+gulp.task( 'pug' , function(cb) {
+	return gulp.src(config.pug.src)
 		.pipe(plumber({errorHandler: notify.onError("Error: <%= error.message %>")}))
-		.pipe(cache('templatesCache'))
+		.pipe(cache('pugCache'))
 		.pipe(pug({
 			pretty: '\t'
 		}))
-		.pipe(gulp.dest(config.templates.dest))
+		.pipe(gulp.dest(config.pug.dest))
 });
 
 // > Process partials .Pug files into 'public' folder
-gulp.task( 'templatePartials' , function(cb) {
-	return gulp.src(config.templates.src)
+gulp.task( 'pugPartials' , function(cb) {
+	return gulp.src(config.pug.src)
 		.pipe(plumber({errorHandler: notify.onError("Error: <%= error.message %>")}))
 		.pipe(pug({
 			pretty: '\t'
 		}))
-		.pipe(gulp.dest(config.templates.dest))
+		.pipe(gulp.dest(config.pug.dest))
 });
 
 // > Process SASS/SCSS files to generate final css files in 'public' folder
@@ -99,8 +99,8 @@ gulp.task( 'go' , ['default'], function () {
 	});
 	gulp.watch(config.watch.styles, ['styles']);
 	gulp.watch(config.watch.scripts, ['scripts', 'plugins']);
-	gulp.watch(config.watch.templates, ['bs-reload', ['templates']]);
-	gulp.watch(config.watch.templatePartials, ['bs-reload', ['templatePartials']]);
+	gulp.watch(config.watch.pug, ['bs-reload', ['pug']]);
+	gulp.watch(config.watch.pugPartials, ['bs-reload', ['pugPartials']]);
 });
 
 // > Force a browser page reload
@@ -110,7 +110,7 @@ gulp.task( 'bs-reload' , function () {
 
 // > Generate 'public' folder
 gulp.task('default', ['clean'], function (cb) {
-	runSequence('styles', ['templates', 'templatePartials', 'plugins', 'scripts'], cb);
+	runSequence('styles', ['pug', 'pugPartials', 'plugins', 'scripts'], cb);
 });
 
 // > Delete Public folder

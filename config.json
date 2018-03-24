@@ -4,11 +4,11 @@
 		"src": "src/assets/js/vendor/*.js",
 		"dest": "public/assets/js/vendor"
 	},
-	"templates": {
+	"pug": {
 		"src": [
-			"src/templates/**/*.pug",
-			"!src/templates/partials/*.pug",
-			"!src/templates/layouts/*.pug"
+			"src/pug/**/*.pug",
+			"!src/pug/partials/*.pug",
+			"!src/pug/layouts/*.pug"
 		],
 		"dest": "public"
 	},
@@ -37,13 +37,13 @@
 		"styles": [
 			"src/scss/**/*.{scss,sass,css}"
 		],
-		"templates": [
-			"src/templates/**/*.pug",
-			"!src/templates/partials/*.pug"
+		"pug": [
+			"src/pug/**/*.pug",
+			"!src/pug/partials/*.pug"
 		],
 		"templatePartials": [
-			"src/templates/partials/*.pug",
-			"src/templates/layouts/*.pug"
+			"src/pug/partials/*.pug",
+			"src/pug/layouts/*.pug"
 		],
 		"html": [
 			"public/**/*.html",
