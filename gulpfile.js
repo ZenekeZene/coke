@@ -33,7 +33,6 @@ gulp.task( 'templates' , function(cb) {
 			pretty: '\t'
 		}))
 		.pipe(gulp.dest(config.templates.dest))
-		.pipe(notify({message: '> Templates OK', onLast: true}));
 });
 
 // > Process partials .Pug files into 'public' folder
@@ -44,7 +43,6 @@ gulp.task( 'templatePartials' , function(cb) {
 			pretty: '\t'
 		}))
 		.pipe(gulp.dest(config.templates.dest))
-		.pipe(notify({message: '> Complete templates OK', onLast: true}));
 });
 
 // > Process SASS/SCSS files to generate final css files in 'public' folder
@@ -65,7 +63,6 @@ gulp.task( 'styles' , function(cb) {
 		.pipe(sourcemaps.write('./'))
 		.pipe(gulp.dest(config.styles.dest))
 		.pipe(browserSync.reload({ stream:true }))
-		.pipe(notify({message: '> CSS OK', onLast: true}));
 });
 
 // > Process plugins into a single JS file inside 'assets/js' folder
@@ -77,7 +74,6 @@ gulp.task( 'plugins' , function() {
 		.pipe(sourcemaps.write('./'))
 		.pipe(gulp.dest(config.plugins.dest))
 		.pipe(browserSync.reload({ stream:true }))
-		.pipe(notify({message: 'PLUGINS OK', onLast: true}));
 });
 
 // > Process JS scripts into a single JS file inside 'assets/js' folder
@@ -90,7 +86,6 @@ gulp.task( 'scripts' , function() {
 		.pipe(sourcemaps.write('./'))
 		.pipe(gulp.dest(config.scripts.dest))
 		.pipe(browserSync.reload({ stream:true }))
-		.pipe(notify({message: 'JS OK', onLast: true}));
 });
 
 // > Create a development server with BrowserSync
